@@ -8,7 +8,6 @@ from app.services.role_service import role_service
 
 class RoleResource(Resource):
     
-    @jwt_required()
     def get(self):
         
         try:
@@ -42,7 +41,7 @@ class RoleResource(Resource):
 
         except ValidationError as e:
             return {
-                'error': e.errors()
+                'error': str(e.errors())
             }, 400
         except Exception as e:
             return {
@@ -52,7 +51,6 @@ class RoleResource(Resource):
 
 class ManagerRoleResource(Resource):
 
-    @jwt_required()
     def get(self, id_role: int):
         try:
             
@@ -97,7 +95,7 @@ class ManagerRoleResource(Resource):
         
         except ValidationError as e:
             return {
-                'error': e.errors()
+                'error': str(e.errors())
             }, 400
         except Exception as e:
             return {

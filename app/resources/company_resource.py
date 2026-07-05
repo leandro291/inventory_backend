@@ -40,7 +40,7 @@ class CompanyResource(Resource):
             
         except ValidationError as e:
             return {
-                'error': e.errors()
+                'error': str(e.errors())
             }
         except Exception as e:
             return {
@@ -86,7 +86,7 @@ class ManagerCompanyResource(Resource):
             
         except ValidationError as e:
             return {
-                'error': e.errors()
+                'error': str(e.errors())
             }
         except Exception as e:
             return {

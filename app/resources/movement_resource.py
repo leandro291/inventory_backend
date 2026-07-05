@@ -60,16 +60,15 @@ class MovementResource(Resource):
                         f'product {item.id_product} has no inventory in this repository'
                     )
 
-                if inventory.stock < item.quantity:
-                    raise Exception(
-                        f'insufficient stock for product {item.id_product}'
-                    )
-
                 movement_detail_service.create(item, movement.id_movement)
 
                 if is_entry:
                     inventory.stock += item.quantity
                 else:
+                    if inventory.stock < item.quantity:
+                        raise Exception(
+                            f'insufficient stock for product {item.id_product}'
+                        )
                     inventory.stock -= item.quantity
 
             db.session.commit()
@@ -78,7 +77,7 @@ class MovementResource(Resource):
 
         except ValidationError as e:
             return {
-                'error': e.errors()
+                'error': str(e.errors())
                 }, 400
         except Exception as e:
             db.session.rollback()

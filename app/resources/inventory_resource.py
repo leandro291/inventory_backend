@@ -1,3 +1,4 @@
+from db import db
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
@@ -31,16 +32,16 @@ class InventoryResource(Resource):
             )
 
             if inventory:
-                return {
-                    'error': 'inventory already exists for this product and repository'
-                }, 400
+                inventory.stock += validated_data.stock
+                db.session.commit()
+                return inventory.to_json(), 200
 
             inventory = inventory_service.create(validated_data)
             return inventory.to_json(), 200
 
         except ValidationError as e:
             return {
-                'error': e.errors()
+                'error': str(e.errors())
                 }, 400
         except Exception as e:
             return {
@@ -80,7 +81,7 @@ class ManagerInventoryResource(Resource):
 
         except ValidationError as e:
             return {
-                'error': e.errors()
+                'error': str(e.errors())
                 }, 400
         except Exception as e:
             return {

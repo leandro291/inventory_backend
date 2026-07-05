@@ -63,7 +63,7 @@ class ProductResource(Resource):
 
         except ValidationError as e:
             return {
-                'error': e.errors()
+                'error': str(e.errors())
             }, 400
         except Exception as e:
             return {
@@ -128,7 +128,7 @@ class ManagerProductResource(Resource):
 
         except ValidationError as e:
             return {
-                'error': e.errors()
+                'error': str(e.errors())
             }, 400
         except Exception as e:
             return {

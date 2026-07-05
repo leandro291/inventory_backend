@@ -6,5 +6,5 @@ class ProductSchema(BaseModel):
     description: str
     brand: str
     purchase_price: float
-    sales_price: float
+    sale_price: float
     id_category: int

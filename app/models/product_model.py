@@ -30,6 +30,7 @@ class Product(db.Model):
             'brand': self.brand,
             'purchase_price': float(self.purchase_price),
             'sale_price': float(self.sale_price),
+            'status': self.status,
             'created_at': str(self.created_at),
             'updated_at': str(self.updated_at),
             'id_category': self.id_category

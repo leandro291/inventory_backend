@@ -26,7 +26,7 @@ class ProductService:
             image=image,
             brand=data.brand,
             purchase_price=data.purchase_price,
-            sale_price=data.sales_price,
+            sale_price=data.sale_price,
             id_category=data.id_category
         )
 
@@ -44,7 +44,7 @@ class ProductService:
         product.description = data.description
         product.brand = data.brand
         product.purchase_price = data.purchase_price
-        product.sale_price = data.sales_price
+        product.sale_price = data.sale_price
         product.id_category = data.id_category
 
         db.session.commit()

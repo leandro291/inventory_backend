@@ -32,6 +32,7 @@ class AuthService:
         access_token = create_access_token(
             identity=hashed_id,
             additional_claims={
+                'id_user': user.id_user,
                 'name': user.name,
                 'last_name': user.last_name,
                 'email': user.email

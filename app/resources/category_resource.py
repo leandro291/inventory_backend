@@ -9,6 +9,32 @@ class CategoryResource(Resource):
     
     @jwt_required()
     def get(self):
+        """
+        Obtener todas las categorías
+        ---
+        tags:
+          - Categorías
+        responses:
+          200:
+            description: Lista de categorías obtenida exitosamente
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id_category:
+                    type: integer
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+          400:
+            description: Error interno
+        """
         try:
 
             categories = category_service.get_all()
@@ -22,6 +48,46 @@ class CategoryResource(Resource):
         
     @jwt_required()
     def post(self):
+        """
+        Crear una nueva categoría
+        ---
+        tags:
+          - Categorías
+        parameters:
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "string"
+                description:
+                  type: string
+                  example: "string"
+              required:
+                - name
+                - description
+        responses:
+          200:
+            description: Categoría creada exitosamente
+            schema:
+              type: object
+              properties:
+                id_category:
+                  type: integer
+                name:
+                  type: string
+                description:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+          400:
+            description: La categoría ya existe o error de validación
+        """
         try:
             
             data = request.get_json()
@@ -51,6 +117,36 @@ class ManagerCategoryResource(Resource):
     
     @jwt_required()
     def get(self, id_category: int):
+        """
+        Obtener una categoría por ID
+        ---
+        tags:
+          - Categorías
+        parameters:
+          - in: path
+            name: id_category
+            type: integer
+            required: true
+            description: ID de la categoría
+        responses:
+          200:
+            description: Categoría encontrada
+            schema:
+              type: object
+              properties:
+                id_category:
+                  type: integer
+                name:
+                  type: string
+                description:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+          404:
+            description: Categoría no encontrada
+        """
         try:
             
             category = category_service.get_by_id(id_category)
@@ -69,6 +165,40 @@ class ManagerCategoryResource(Resource):
 
     @jwt_required()
     def put(self, id_category: int):
+        """
+        Actualizar una categoría por ID
+        ---
+        tags:
+          - Categorías
+        parameters:
+          - in: path
+            name: id_category
+            type: integer
+            required: true
+            description: ID de la categoría
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "string"
+                description:
+                  type: string
+                  example: "string"
+              required:
+                - name
+                - description
+        responses:
+          200:
+            description: Categoría actualizada exitosamente
+          400:
+            description: Error de validación
+          404:
+            description: Categoría no encontrada
+        """
         try:
             category = category_service.get_by_id(id_category)
 
@@ -94,6 +224,23 @@ class ManagerCategoryResource(Resource):
 
     @jwt_required()
     def delete(self, id_category: int):
+        """
+        Eliminar una categoría por ID
+        ---
+        tags:
+          - Categorías
+        parameters:
+          - in: path
+            name: id_category
+            type: integer
+            required: true
+            description: ID de la categoría
+        responses:
+          200:
+            description: Categoría eliminada exitosamente
+          404:
+            description: Categoría no encontrada
+        """
         try:
             category = category_service.get_by_id(id_category)
 

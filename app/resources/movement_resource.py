@@ -15,6 +15,42 @@ class MovementResource(Resource):
 
     @jwt_required()
     def get(self):
+        """
+        Obtener todos los movimientos
+        ---
+        tags:
+          - Movimientos
+        responses:
+          200:
+            description: Lista de movimientos obtenida exitosamente
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id_movement:
+                    type: integer
+                  observation:
+                    type: string
+                  status:
+                    type: boolean
+                  created_at:
+                    type: string
+                  supplier:
+                    type: object
+                  type_movement:
+                    type: object
+                  user:
+                    type: object
+                  repository:
+                    type: object
+                  details:
+                    type: array
+                    items:
+                      type: object
+          400:
+            description: Error interno
+        """
         try:
             movements = movement_service.get_all()
             movements_list = [movement.to_json() for movement in movements]
@@ -26,6 +62,65 @@ class MovementResource(Resource):
 
     @jwt_required()
     def post(self):
+        """
+        Crear un nuevo movimiento (entrada/salida)
+        ---
+        tags:
+          - Movimientos
+        parameters:
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                observation:
+                  type: string
+                  example: "string"
+                id_supplier:
+                  type: integer
+                  example: 1
+                id_type_movement:
+                  type: integer
+                  example: 1
+                id_user:
+                  type: integer
+                  example: 1
+                id_repository:
+                  type: integer
+                  example: 1
+                movement_details:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      quantity:
+                        type: integer
+                        example: 10
+                      unit_price:
+                        type: number
+                        example: 25.50
+                      id_product:
+                        type: integer
+                        example: 1
+                    required:
+                      - quantity
+                      - unit_price
+                      - id_product
+              required:
+                - id_supplier
+                - id_type_movement
+                - id_user
+                - id_repository
+                - movement_details
+        responses:
+          201:
+            description: Movimiento creado exitosamente
+          400:
+            description: Error de validación o stock insuficiente
+          404:
+            description: Tipo de movimiento o producto no encontrado
+        """
         try:
             data = request.get_json()
             validated_data = MovementSchema.model_validate(data)
@@ -90,6 +185,46 @@ class ManagerMovementResource(Resource):
 
     @jwt_required()
     def get(self, id_movement: int):
+        """
+        Obtener un movimiento por ID
+        ---
+        tags:
+          - Movimientos
+        parameters:
+          - in: path
+            name: id_movement
+            type: integer
+            required: true
+            description: ID del movimiento
+        responses:
+          200:
+            description: Movimiento encontrado
+            schema:
+              type: object
+              properties:
+                id_movement:
+                  type: integer
+                observation:
+                  type: string
+                status:
+                  type: boolean
+                created_at:
+                  type: string
+                supplier:
+                  type: object
+                type_movement:
+                  type: object
+                user:
+                  type: object
+                repository:
+                  type: object
+                details:
+                  type: array
+                  items:
+                    type: object
+          404:
+            description: Movimiento no encontrado
+        """
         try:
             movement = movement_service.get_by_id(id_movement)
 
@@ -106,6 +241,23 @@ class ManagerMovementResource(Resource):
 
     @jwt_required()
     def delete(self, id_movement: int):
+        """
+        Eliminar un movimiento por ID
+        ---
+        tags:
+          - Movimientos
+        parameters:
+          - in: path
+            name: id_movement
+            type: integer
+            required: true
+            description: ID del movimiento
+        responses:
+          200:
+            description: Movimiento eliminado exitosamente
+          404:
+            description: Movimiento no encontrado
+        """
         try:
             movement = movement_service.get_by_id(id_movement)
 

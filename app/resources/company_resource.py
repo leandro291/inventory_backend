@@ -10,6 +10,34 @@ class CompanyResource(Resource):
     
     @jwt_required()
     def get(self):
+        """
+        Obtener todas las empresas
+        ---
+        tags:
+          - Empresas
+        responses:
+          200:
+            description: Lista de empresas obtenida exitosamente
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id_company:
+                    type: integer
+                  name:
+                    type: string
+                  ruc:
+                    type: string
+                  address:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+          400:
+            description: Error interno
+        """
         try:
 
             companies: list[Company] = company_service.get_all()
@@ -23,6 +51,52 @@ class CompanyResource(Resource):
 
     @jwt_required()
     def post(self):
+        """
+        Crear una nueva empresa
+        ---
+        tags:
+          - Empresas
+        parameters:
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "string"
+                ruc:
+                  type: string
+                  example: "string"
+                address:
+                  type: string
+                  example: "string"
+              required:
+                - name
+                - ruc
+                - address
+        responses:
+          200:
+            description: Empresa creada exitosamente
+            schema:
+              type: object
+              properties:
+                id_company:
+                  type: integer
+                name:
+                  type: string
+                ruc:
+                  type: string
+                address:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+          400:
+            description: La empresa ya existe o error de validación
+        """
         try:
             data = request.get_json()
             validated_data = CompanySchema.model_validate(data)
@@ -51,6 +125,38 @@ class ManagerCompanyResource(Resource):
     
     @jwt_required()
     def get(self, id_company: int):
+        """
+        Obtener una empresa por ID
+        ---
+        tags:
+          - Empresas
+        parameters:
+          - in: path
+            name: id_company
+            type: integer
+            required: true
+            description: ID de la empresa
+        responses:
+          200:
+            description: Empresa encontrada
+            schema:
+              type: object
+              properties:
+                id_company:
+                  type: integer
+                name:
+                  type: string
+                ruc:
+                  type: string
+                address:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+          404:
+            description: Empresa no encontrada
+        """
         try:
             
             company = company_service.get_by_id(id_company)
@@ -69,6 +175,44 @@ class ManagerCompanyResource(Resource):
 
     @jwt_required()
     def put(self, id_company):
+        """
+        Actualizar una empresa por ID
+        ---
+        tags:
+          - Empresas
+        parameters:
+          - in: path
+            name: id_company
+            type: integer
+            required: true
+            description: ID de la empresa
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "string"
+                ruc:
+                  type: string
+                  example: "string"
+                address:
+                  type: string
+                  example: "string"
+              required:
+                - name
+                - ruc
+                - address
+        responses:
+          200:
+            description: Empresa actualizada exitosamente
+          400:
+            description: Error de validación
+          404:
+            description: Empresa no encontrada
+        """
         try:
             company = company_service.get_by_id(id_company)
 
@@ -95,6 +239,23 @@ class ManagerCompanyResource(Resource):
 
     @jwt_required()
     def delete(self, id_company):
+        """
+        Eliminar una empresa por ID
+        ---
+        tags:
+          - Empresas
+        parameters:
+          - in: path
+            name: id_company
+            type: integer
+            required: true
+            description: ID de la empresa
+        responses:
+          200:
+            description: Empresa eliminada exitosamente
+          404:
+            description: Empresa no encontrada
+        """
         try:
             company = company_service.get_by_id(id_company)
 

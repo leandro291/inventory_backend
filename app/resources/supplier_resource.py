@@ -9,6 +9,36 @@ class SupplierResource(Resource):
 
     @jwt_required()
     def get(self):
+        """
+        Obtener todos los proveedores
+        ---
+        tags:
+          - Proveedores
+        responses:
+          200:
+            description: Lista de proveedores obtenida exitosamente
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id_supplier:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  telephone:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+                  id_company:
+                    type: integer
+          400:
+            description: Error interno
+        """
         try:
             suppliers = supplier_service.get_all()
             suppliers_list = [supplier.to_json() for supplier in suppliers]
@@ -20,6 +50,58 @@ class SupplierResource(Resource):
 
     @jwt_required()
     def post(self):
+        """
+        Crear un nuevo proveedor
+        ---
+        tags:
+          - Proveedores
+        parameters:
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "string"
+                email:
+                  type: string
+                  example: "proveedor@example.com"
+                telephone:
+                  type: string
+                  example: "999999999"
+                id_company:
+                  type: integer
+                  example: 1
+              required:
+                - name
+                - email
+                - telephone
+                - id_company
+        responses:
+          200:
+            description: Proveedor creado exitosamente
+            schema:
+              type: object
+              properties:
+                id_supplier:
+                  type: integer
+                name:
+                  type: string
+                email:
+                  type: string
+                telephone:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+                id_company:
+                  type: integer
+          400:
+            description: El email ya existe o error de validación
+        """
         try:
             data = request.get_json()
             validated_data = SupplierSchema.model_validate(data)
@@ -48,6 +130,40 @@ class ManagerSupplierResource(Resource):
 
     @jwt_required()
     def get(self, id_supplier: int):
+        """
+        Obtener un proveedor por ID
+        ---
+        tags:
+          - Proveedores
+        parameters:
+          - in: path
+            name: id_supplier
+            type: integer
+            required: true
+            description: ID del proveedor
+        responses:
+          200:
+            description: Proveedor encontrado
+            schema:
+              type: object
+              properties:
+                id_supplier:
+                  type: integer
+                name:
+                  type: string
+                email:
+                  type: string
+                telephone:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+                id_company:
+                  type: integer
+          404:
+            description: Proveedor no encontrado
+        """
         try:
             supplier = supplier_service.get_by_id(id_supplier)
 
@@ -65,6 +181,48 @@ class ManagerSupplierResource(Resource):
 
     @jwt_required()
     def put(self, id_supplier: int):
+        """
+        Actualizar un proveedor por ID
+        ---
+        tags:
+          - Proveedores
+        parameters:
+          - in: path
+            name: id_supplier
+            type: integer
+            required: true
+            description: ID del proveedor
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "string"
+                email:
+                  type: string
+                  example: "proveedor@example.com"
+                telephone:
+                  type: string
+                  example: "999999999"
+                id_company:
+                  type: integer
+                  example: 1
+              required:
+                - name
+                - email
+                - telephone
+                - id_company
+        responses:
+          200:
+            description: Proveedor actualizado exitosamente
+          400:
+            description: El email ya existe o error de validación
+          404:
+            description: Proveedor no encontrado
+        """
         try:
             supplier = supplier_service.get_by_id(id_supplier)
 
@@ -98,6 +256,23 @@ class ManagerSupplierResource(Resource):
 
     @jwt_required()
     def delete(self, id_supplier: int):
+        """
+        Eliminar un proveedor por ID
+        ---
+        tags:
+          - Proveedores
+        parameters:
+          - in: path
+            name: id_supplier
+            type: integer
+            required: true
+            description: ID del proveedor
+        responses:
+          200:
+            description: Proveedor eliminado exitosamente
+          404:
+            description: Proveedor no encontrado
+        """
         try:
             supplier = supplier_service.get_by_id(id_supplier)
 

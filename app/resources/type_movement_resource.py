@@ -9,6 +9,32 @@ class TypeMovementResource(Resource):
 
     @jwt_required()
     def get(self):
+        """
+        Obtener todos los tipos de movimiento
+        ---
+        tags:
+          - Tipos de Movimiento
+        responses:
+          200:
+            description: Lista de tipos de movimiento obtenida exitosamente
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id_type_movement:
+                    type: integer
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+          400:
+            description: Error interno
+        """
         try:
             type_movements = type_movement_service.get_all()
             type_movements_list = [tm.to_json() for tm in type_movements]
@@ -20,6 +46,46 @@ class TypeMovementResource(Resource):
 
     @jwt_required()
     def post(self):
+        """
+        Crear un nuevo tipo de movimiento
+        ---
+        tags:
+          - Tipos de Movimiento
+        parameters:
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "string"
+                description:
+                  type: string
+                  example: "string"
+              required:
+                - name
+                - description
+        responses:
+          200:
+            description: Tipo de movimiento creado exitosamente
+            schema:
+              type: object
+              properties:
+                id_type_movement:
+                  type: integer
+                name:
+                  type: string
+                description:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+          400:
+            description: El nombre ya existe o error de validación
+        """
         try:
             data = request.get_json()
             validated_data = TypeMovementSchema.model_validate(data)
@@ -48,6 +114,36 @@ class ManagerTypeMovementResource(Resource):
 
     @jwt_required()
     def get(self, id_type_movement: int):
+        """
+        Obtener un tipo de movimiento por ID
+        ---
+        tags:
+          - Tipos de Movimiento
+        parameters:
+          - in: path
+            name: id_type_movement
+            type: integer
+            required: true
+            description: ID del tipo de movimiento
+        responses:
+          200:
+            description: Tipo de movimiento encontrado
+            schema:
+              type: object
+              properties:
+                id_type_movement:
+                  type: integer
+                name:
+                  type: string
+                description:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+          404:
+            description: Tipo de movimiento no encontrado
+        """
         try:
             type_movement = type_movement_service.get_by_id(id_type_movement)
 
@@ -65,6 +161,40 @@ class ManagerTypeMovementResource(Resource):
 
     @jwt_required()
     def put(self, id_type_movement: int):
+        """
+        Actualizar un tipo de movimiento por ID
+        ---
+        tags:
+          - Tipos de Movimiento
+        parameters:
+          - in: path
+            name: id_type_movement
+            type: integer
+            required: true
+            description: ID del tipo de movimiento
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "string"
+                description:
+                  type: string
+                  example: "string"
+              required:
+                - name
+                - description
+        responses:
+          200:
+            description: Tipo de movimiento actualizado exitosamente
+          400:
+            description: El nombre ya existe o error de validación
+          404:
+            description: Tipo de movimiento no encontrado
+        """
         try:
             type_movement = type_movement_service.get_by_id(id_type_movement)
 
@@ -97,6 +227,23 @@ class ManagerTypeMovementResource(Resource):
 
     @jwt_required()
     def delete(self, id_type_movement: int):
+        """
+        Eliminar un tipo de movimiento por ID
+        ---
+        tags:
+          - Tipos de Movimiento
+        parameters:
+          - in: path
+            name: id_type_movement
+            type: integer
+            required: true
+            description: ID del tipo de movimiento
+        responses:
+          200:
+            description: Tipo de movimiento eliminado exitosamente
+          404:
+            description: Tipo de movimiento no encontrado
+        """
         try:
             type_movement = type_movement_service.get_by_id(id_type_movement)
 

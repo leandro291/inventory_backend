@@ -8,6 +8,42 @@ from app.schemas.auth_schema import LoginSchema, RegisterSchema
 class LoginResource(Resource):
 
     def post(self):
+        """
+        Iniciar sesión
+        ---
+        tags:
+          - Auth
+        parameters:
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "user@example.com"
+                password:
+                  type: string
+                  example: "password123"
+              required:
+                - email
+                - password
+        responses:
+          200:
+            description: Inicio de sesión exitoso
+            schema:
+              type: object
+              properties:
+                access:
+                  type: string
+                refresh:
+                  type: string
+          400:
+            description: Error de validación
+          401:
+            description: Credenciales inválidas
+        """
         try:
             data = request.get_json()
             validated_data = LoginSchema.model_validate(data)
@@ -45,6 +81,64 @@ class LoginResource(Resource):
 class RegisterResource(Resource):
 
     def post(self):
+        """
+        Registrar un nuevo usuario
+        ---
+        tags:
+          - Auth
+        parameters:
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Leandro"
+                last_name:
+                  type: string
+                  example: "Rojas"
+                email:
+                  type: string
+                  example: "leandro@example.com"
+                password:
+                  type: string
+                  example: "password123"
+                id_role:
+                  type: integer
+                  example: 1
+              required:
+                - name
+                - last_name
+                - email
+                - password
+                - id_role
+        responses:
+          200:
+            description: Usuario creado exitosamente
+            schema:
+              type: object
+              properties:
+                id_user:
+                  type: integer
+                name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+                id_role:
+                  type: integer
+          400:
+            description: Error de validación
+          404:
+            description: El email ya existe
+        """
         try:
             data = request.get_json()
             validated_data = RegisterSchema.model_validate(data)
